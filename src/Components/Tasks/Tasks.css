@@ -1,0 +1,31 @@
+.TaskView {
+  width: 100%;
+}
+
+.TaskForm {
+  width: 100%;
+  background-color: cadetblue;
+  display: grid;
+  grid: [row1-start] "title materials" 1fr [row1-end]
+        [row2-start] "details materials" 1fr [row2-end]
+        [row3-start] "modifiers submit" 1fr [row3-end]
+        / 3fr 1fr
+}
+
+.task-title {
+  grid-area: title;
+}
+
+.task-details {
+  grid-area: details;
+}
+
+.task-modifers {
+  grid-area: modifiers;
+  display: flex;
+  
+}
+
+.task-materials {
+  grid-area: materials;
+}
