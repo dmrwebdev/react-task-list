@@ -1,50 +1,215 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import data from '../data.json'
-import List from './List'
-import TaskForm from './Tasks/TaskForm'
 import Sidebar from './Sidebar/Sidebar';
-import Tasks from './Tasks/Tasks';
+import ListView from './Tasks/ListView';
+import TaskForm from './Tasks/TaskForm';
+import firebase from '../database';
 
+const inputInitialState = {
+  "title": "",
+  "details": "",
+  "dueDate": "",
+  "priority": "",
+  "difficulty": "",
+  "reward": "",
+  'materials': {
+/*     material: {
+      "item": "",
+      "price": ""
+    
+    } */
+  }
+}
 
 const App = () => { 
-  const [ taskList, setTaskList ] = useState(data);
-  const [ taskInput, setTaskInput ] = useState('');
-  const [ taskView, setTaskView ] = useState(false)
-//for now true is list view and false is task form
+  //UX States
+  const [ userView, setUserView ] = useState(true); //Will change to some other system for more types of views, for now true is list view 
+  //Task states
+  const [ taskList, setTaskList ] = useState('');
+  const [ taskInput, setTaskInput ] = useState(inputInitialState);
+  const [ currentTaskId, setCurrentTaskId ] = useState('');
+  const [ newMaterialBox, setNewMaterialBox ] = useState(false);
+  //Sidebar States
+  const [ collectionList, setCollectionList ] = useState('');
+  const [ collectionInput, setCollectionInput ] = useState('');
+  const [ selectedCollection, setSelectedCollection] = useState('list-default');
 
+  const dbRef = firebase.database();
+  // Lifecycle hook for firebase.
+  useEffect(() => {
+    let ref = dbRef.ref('tasks');
+    // Sync the data.
+    ref.on('value', snapshot => {
+        if (snapshot.val()){
+          setTaskList(snapshot.val());
+        } 
+    });
+    return () => ref
+  }, []);
+
+  useEffect(() => {
+    let ref = dbRef.ref('tasks');
+    // Sync the data.
+    ref.on('value', snapshot => {
+        if (snapshot.val()){
+          setCollectionList(snapshot.val());
+        } 
+    });
+    return () => ref
+  }, []);
+  
   const handleToggle = (event) => {
     const id = event.target.id;
-    let mapped = taskList.map(task => {
-      return task.id === Number(id) ? { ...task, complete: !task.complete } : { ...task};
+    const regex = /(?<=list-).+/g
+    const list = selectedCollection.match(regex).toString();
+    dbRef.ref().child('tasks/').child(list).child(id).get().then((snapshot) => {
+      if (snapshot.exists()) {
+        setCurrentTaskId(id);
+        setTaskInput(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
     });
-    setTaskList(mapped);
+    setUserView(false)
   }
 
   const handleChange = (event) => {
-    setTaskInput(event.target.value)
+    const materialName = event.target.name.match(/(?<=material-).+/g);
+    if(event.target.name.match(/^material/)) {
+      if (taskInput.materials[event.target.parentElement.id]) {
+        console.log('firing1')
+        setTaskInput({...taskInput, materials: { ...taskInput.materials, 
+          [event.target.parentElement.id]: { ...taskInput.materials[event.target.parentElement.id], [materialName]: event.target.value}}})
+      } else {
+        console.log('firing2')
+        setTaskInput({...taskInput, materials: { ...taskInput.materials, 
+          [event.target.parentElement.id]: {[materialName]: event.target.value}}})
+      }
+    } else {
+      const value = event.target.value;
+      setTaskInput({...taskInput, [event.target.name]: value}); 
+    }
   }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    addTask(taskInput);
-    setTaskInput('');
+    const regex = /(?<=list-).+/g
+    const id = selectedCollection.match(regex).toString();
+    if(taskInput.title) {
+      dbRef.ref('tasks/' + id).push(taskInput);
+      setCurrentTaskId('')
+      setTaskInput(inputInitialState);
+    }
   }
 
-  const addTask = (userInput) => {
-    let copy = [...taskList];
-    copy = [...copy, { id: taskList.length + 1, task: taskInput, complete: false }];
-    setTaskList(copy);
+  const deleteTask = (event) => {
+    if (currentTaskId) {
+      dbRef.ref().child(`tasks/${currentTaskId}`).remove()
+    } //else nothing
+    setCurrentTaskId('');
+    setTaskInput(inputInitialState);
   }
+
+  const handleCollectionInput = (event) => {
+    setCollectionInput(event.target.value)
+  }
+
+  const createCollection = (event) => {
+    event.preventDefault();
+    if (collectionInput) {
+      dbRef.ref('tasks').child(collectionInput).push({'placeholder': 'for initialization'});
+    setCollectionInput('');
+    }
+  }
+
+  const openCollection = (event) => {
+    const activeList = document.querySelector('.list-active')
+    const newList = document.getElementById(event.target.id);
+    if (activeList) {
+      activeList.classList.remove('list-active')
+    }
+    setSelectedCollection(event.target.id);
+    newList.classList.add('list-active');
+  }
+
+  const deleteCollection = (event) => {
+    const regex = /(?<=delete-).+/g;
+    const id = event.target.id.match(regex).toString(); 
+    if (id !== 'default') {
+      dbRef.ref().child('tasks').child(id).remove()
+      .then(function() {
+        console.log("Remove succeeded.")
+      })
+      .catch(function(error) {
+        console.log("Remove failed: " + error.message)
+      });;
+      setSelectedCollection('default')
+    }
+  }
+
+  const generateMaterialBox = () => {
+    const materialBoxes = document.querySelectorAll('.material-container')
+    console.log(Array.from(materialBoxes).length)
+  /*   if (materialBoxes.length === 1) {
+
+    } */
+    /* if (materialBoxes.length[materialBoxes.length - 1][] */
+    return 'poop'
+  }
+  console.log(generateMaterialBox())
+  /* const selectedCollection = */
 
   const changeView = () => {
-    taskView ? setTaskView(false) : setTaskView(true)
+    if (userView) {
+      setUserView(false)
+    } else if (!userView && currentTaskId) {
+      setCurrentTaskId('')
+      setTaskInput(inputInitialState)
+      setUserView(true)
+    } else {
+      setUserView(true)
+    }
   }
+
+  const view = () => {
+    if (userView) {
+      return (
+        <ListView
+          handleChange={handleChange} 
+          handleToggle={handleToggle} 
+          handleSubmit={handleSubmit}
+          taskList={taskList}
+          selectedCollection={selectedCollection}
+          taskInput={taskInput}
+          
+         />
+      )
+    } else {
+      return (
+      <TaskForm
+        deleteTask={deleteTask}
+        handleChange={handleChange}  
+        handleSubmit={handleSubmit}
+        taskInput={taskInput}
+      />
+      )
+    }
+  }  
 
   return (
     <div className="App">
-      <Sidebar changeView={changeView} />
-      <Tasks handleSubmit={handleSubmit} handleChange={handleChange} taskList={taskList} taskView={taskView} />
+      <Sidebar 
+        changeView={changeView} 
+        createCollection={createCollection}
+        handleCollectionInput={handleCollectionInput}
+        collectionList={collectionList}
+        openCollection={openCollection}
+        deleteCollection={deleteCollection}
+        collectionInput={collectionInput}
+         />
+      {view()}
     </div>
   );
 }

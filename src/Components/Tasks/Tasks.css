@@ -6,26 +6,53 @@
   width: 100%;
   background-color: cadetblue;
   display: grid;
-  grid: [row1-start] "title materials" 1fr [row1-end]
+  grid: [row1-start] "title controls" 75px [row1-end]
         [row2-start] "details materials" 1fr [row2-end]
-        [row3-start] "modifiers submit" 1fr [row3-end]
-        / 3fr 1fr
+        [row3-start] "modifiers submit" 75px [row3-end]
+        / 3fr 1fr;
+  border: 2px solid black;
 }
 
 .task-title {
   grid-area: title;
+  border: none;
+  outline: none;
+  resize: none;
 }
 
 .task-details {
   grid-area: details;
 }
 
-.task-modifers {
+.task-modifiers {
   grid-area: modifiers;
   display: flex;
-  
+  justify-content: space-around;
+
 }
 
 .task-materials {
   grid-area: materials;
+}
+
+.field {
+  width: 100%;
+  height: 56px;
+  border-radius: 4px;
+  position: relative;
+  background-color: rgba(255,255,255,0.3);
+  transition: 0.3s all;
+}
+
+.field:hover {
+  background-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+}
+
+.task-submit {
+  grid-area: submit;
+}
+
+.list-active {
+  border: 2px solid black;
 }
