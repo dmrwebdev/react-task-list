@@ -106,7 +106,7 @@ const App = () => {
       }
     } 
   }
-
+  
   const deleteTask = (event) => {
     if (currentTaskId) {
       const regex = /(?<=list-).+/g
