@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Sidebar from './Sidebar/Sidebar';
-import ListView from './Tasks/ListView';
+import ListView from './TaskForm/ListView';
 import TaskForm from './TaskForm/TaskForm';
 import firebase from '../database';
 
@@ -57,7 +57,7 @@ const App = () => {
   }, []);
   
   const handleToggle = (event) => {
-    const id = event.target.id;
+    const id = event.target.parentElement.id;
     const regex = /(?<=list-).+/g
     const list = selectedCollection.match(regex).toString();
     dbRef.ref().child('tasks/').child(list).child(id).get().then((snapshot) => {
@@ -195,15 +195,18 @@ const App = () => {
       )
     } else {
       return (
-      <TaskForm
-        deleteTask={deleteTask}
-        handleChange={handleChange}  
-        handleSubmit={handleSubmit}
-        taskInput={taskInput}
-        generateMaterialBox={generateMaterialBox}
-        userView={userView}
-        currentTaskId={currentTaskId}
-      />
+      <div
+        className="task-background" >
+        <TaskForm
+          deleteTask={deleteTask}
+          handleChange={handleChange}  
+          handleSubmit={handleSubmit}
+          taskInput={taskInput}
+          generateMaterialBox={generateMaterialBox}
+          userView={userView}
+          currentTaskId={currentTaskId}
+        />
+      </div>
       )
     }
   }  

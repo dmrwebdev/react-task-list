@@ -1,55 +1,163 @@
-.TaskView {
+.task-background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
+  background: fixed center/cover url(https://images.unsplash.com/photo-1618551763327-ef3e7e79af34?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80);
 }
 
 .TaskForm {
-  width: 100%;
-  background-color: cadetblue;
+  width: 90%;
+  height: 60%;
+  background-color: #181818;
+  border-radius: 20px;
   display: grid;
-  grid: [row1-start] "title controls" 75px [row1-end]
+  grid: [row1-start] "title materials" 75px [row1-end]
         [row2-start] "details materials" 1fr [row2-end]
-        [row3-start] "modifiers submit" 75px [row3-end]
+        [row3-start] "modifiers buttons" 75px [row3-end]
         / 3fr 1fr;
   border: 2px solid black;
+  box-shadow: 0px 0px 10px 2px black;
+  color: whitesmoke;
 }
 
 .task-title {
   grid-area: title;
+  border-top-left-radius: 20px;
   border: none;
+  border-bottom: 2px solid black;
   outline: none;
   resize: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-size: 30px;
+  padding: 1rem;
+  background-color: #404040;
+  color: whitesmoke;
 }
 
 .task-details {
   grid-area: details;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  font-size: 17px;
+  background-color: #404040;
+  padding: .5rem;
+  color: whitesmoke;
+}
+
+::placeholder {
+  color: whitesmoke;
 }
 
 .task-modifiers {
   grid-area: modifiers;
   display: flex;
   justify-content: space-around;
-
+  border-top: 2px solid black;
 }
 
+.task-modifiers > label {
+  display: flex;
+  flex-direction: column;
+}
 .task-materials {
   grid-area: materials;
+  overflow-y: auto;
+  border-left: 2px solid black;
+  padding: 1rem;
 }
 
-.field {
+.task-materials input {
+  background-color: #7a7a7a;
+  border-radius: 7px;
+  padding-left: .25rem;
+}
+
+.materials-header {
+  display: flex;
+  justify-content: center;
+  font-size: 3rem;
+}
+
+.materials-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.button-material-delete {
+  border-radius: 20px;
+}
+
+.material-container {
+  display: grid;
+  grid: [row1-start] 30px [row1-end]
+        / 2fr 1fr .5fr;
+  gap: .5rem;
+  margin: .25rem;
+}
+
+.materials-list input:nth-child(even) {
+  background-color: #4C8BF5;
+  color: #fff;
+}
+
+.material-item {
+
+}
+
+.material-price {
+  
+}
+
+.button-material-delete {
+
+}
+
+/* .field {
   width: 100%;
   height: 56px;
   border-radius: 4px;
   position: relative;
   background-color: rgba(255,255,255,0.3);
   transition: 0.3s all;
-}
+} */
 
-.field:hover {
+/* .field:hover {
   background-color: rgba(255, 255, 255, 0.45);
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.05);
+} */
+
+.radio-group {
+  margin-top: .5rem;
+  display: flex;
+}
+
+.radio-group > label {
+  display: flex;
+  flex-direction: column;
+  margin: 0 .5rem;
+}
+
+.radio-group > label > input {
+  margin-top: .25rem;
+}
+
+.task-controls {
+  display: flex;
+  grid-area: buttons;
+}
+
+.task-delete {
+  flex: 1 0 auto;
+  border-bottom-right-radius: 20px;
 }
 
 .task-submit {
-  grid-area: submit;
+  flex: 3 0 auto;
 }
-

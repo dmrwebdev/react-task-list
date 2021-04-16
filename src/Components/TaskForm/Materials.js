@@ -54,19 +54,21 @@ const Materials = ({ handleChange, taskInput, generateMaterialBox }) => {
           className="material-container" >
           <input 
             id={`${key}-item`}
+            className="material-item"
             onChange={handleChange}
             name="material-item"
             placeholder="Material"
             value={taskInput.materials[key].item} />
           <input
             id={`${key}-price`}
+            className="material-price"
             onChange={handleChange}
             name="material-price"
             placeholder="Price"
             value={taskInput.materials[key].price}  />
           <button 
             className="button-material-delete" 
-            id={`delete-${key}`} type="button" onClick={deleteMaterial}>Delete</button>
+            id={`delete-${key}`} type="button" onClick={deleteMaterial}>X</button>
         </div>
         )
       })
@@ -74,9 +76,13 @@ const Materials = ({ handleChange, taskInput, generateMaterialBox }) => {
 
     return(
       <div className="task-materials">
-        <p>Materials</p>
-        <button type="button" onClick={addContainer}>+</button>
-        {mappedMaterials()}
+        <div className="materials-header">
+          <p>Materials</p>
+          <button type="button" onClick={addContainer}>+</button>
+        </div>
+        <div className="materials-list">
+          {mappedMaterials()}
+        </div>
       </div>
     )
   }

@@ -24,7 +24,6 @@ function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, delete
         placeholder='Title'
         onChange={handleChange}
         value={taskInput.title} />
-      <button className="task-delete" onClick={deleteTask} type="button">Delete</button>
       <textarea
         className='task-details'
         name='details'
@@ -65,7 +64,10 @@ function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, delete
         taskInput={taskInput}
         currentTaskId={currentTaskId}
         generateMaterialBox={generateMaterialBox} />
-      <button className="task-submit" type="submit">Submit</button>
+      <div className="task-controls" >
+        <button className="task-submit" type="submit">Submit</button>
+        <button className="task-delete" onClick={deleteTask} type="button">Delete</button>
+      </div>
     </form>
   );
 }

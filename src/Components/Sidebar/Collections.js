@@ -32,7 +32,7 @@ const Collections = ({ createCollection, handleCollectionInput, collectionList, 
       <button id='button-addcollection' name="collection" onClick={createCollection} >New Collection</button>
       <div className="collection list-active" >
           <div
-            id='default-collection'
+            id='list-default'
             className="collection"
             onClick={openCollection} >
             Default List

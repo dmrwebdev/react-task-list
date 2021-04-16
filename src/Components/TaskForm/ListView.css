@@ -1,0 +1,30 @@
+.taskview-background {
+  width: 100%;
+  display: flex;
+  background: fixed center/cover url(https://images.unsplash.com/photo-1618551763327-ef3e7e79af34?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80);
+  display: flex;
+  align-items: center;
+}
+
+.taskview-container {
+  background-color: grey;
+  height: 60%;
+  width: 100%;
+}
+
+.taskview-list-header {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border: 2px solid black;
+}
+
+.taskview-list-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  
+}
+
+.taskview-list li:nth-child(even) {
+  background-color: #4C8BF5;
+  color: #fff;
+}

@@ -16,9 +16,12 @@ const RadioGroup = ({handlechange, groupName, radioVals, description}) => {
   }
 
   return (
-    <p className={`radio-${description.toLowerCase()}`}>{description}
-    {radioMaker()}
-    </p>
+    <label className={`radio-${description.toLowerCase()}`}>{description}
+    <div className="radio-group">
+      {radioMaker()}
+    </div>
+    
+    </label>
   );
 }
 
