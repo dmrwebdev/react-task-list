@@ -1,4 +1,4 @@
-const RadioGroup = ({handleChange, groupName, radioVals, description}) => {
+const RadioGroup = ({handlechange, groupName, radioVals, description}) => {
 
   const radioMaker = () => {
     return radioVals.map(val => (
@@ -8,7 +8,7 @@ const RadioGroup = ({handleChange, groupName, radioVals, description}) => {
       <input
         id={`radio-${groupName}-${val}`}
         name={groupName}
-        onChange={handleChange}
+        onChange={handlechange}
         type="radio"
         value={val} />
     </label>

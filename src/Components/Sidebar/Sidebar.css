@@ -3,3 +3,30 @@
   width: 300px;
   background-color: rgb(94, 94, 94);
 }
+
+.search {
+  height: 100px;
+}
+
+
+.collection-container {
+  padding: 0 2rem;
+}
+
+.collection {
+  margin: .5rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.collection-name {
+  flex: 2 0 auto
+}
+
+.delete-collection {
+
+}
+
+.list-active {
+  border: 2px solid black;
+}

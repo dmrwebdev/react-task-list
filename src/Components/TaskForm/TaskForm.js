@@ -1,24 +1,21 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './Tasks.css';
 import RadioGroup from './RadioGroup'
+import Materials from './Materials'
 
-function TaskForm({taskInput, handleChange, handleSubmit, deleteTask, }) { 
-  const radioVals = [1,2,3,4,5]
+const radioVals = [1,2,3,4,5]
 
+function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, deleteTask, generateMaterialBox }) { 
+  
   const handleChecked = () => {
     const radios = Array.from(document.querySelectorAll('input')).filter(elem => elem.type === 'radio');
     radios.map(elem => {
-      if (taskInput[elem.name] && elem.value === taskInput[elem.name]) {
-        return elem.checked = true;
-      } else {
-        return elem.checked = false;
-      }
+      return taskInput[elem.name] && elem.value === taskInput[elem.name]
+      ? elem.checked = true
+      : elem.checked = false
     });
   }
-  const addContainer = () => {
-    
-  }
-
+  
   return (
     <form className="TaskForm" handlechecked={handleChecked()} onSubmit={handleSubmit} >
       <textarea
@@ -41,7 +38,7 @@ function TaskForm({taskInput, handleChange, handleSubmit, deleteTask, }) {
             onChange={handleChange}
             type="date"
             name="dueDate"
-            value={taskInput.dueDate} />
+            value={taskInput.dueDate || ''} />
         </label>
         <RadioGroup
           taskInput={taskInput}
@@ -63,23 +60,11 @@ function TaskForm({taskInput, handleChange, handleSubmit, deleteTask, }) {
           groupName="reward"
           radioVals={radioVals} />
       </div>
-      <div className="task-materials">
-        <p>Materials</p>
-        <div 
-          id="material1"
-          className="material-container">
-          <input 
-            id='material1-item'
-            onChange={handleChange}
-            name="material-item"
-            placeholder="Material" />
-          <input
-            id='material1-price' 
-            onChange={handleChange}
-            name="material-price"
-            placeholder="Price"/>
-        </div>
-      </div>  
+      <Materials
+        handleChange={handleChange}
+        taskInput={taskInput}
+        currentTaskId={currentTaskId}
+        generateMaterialBox={generateMaterialBox} />
       <button className="task-submit" type="submit">Submit</button>
     </form>
   );

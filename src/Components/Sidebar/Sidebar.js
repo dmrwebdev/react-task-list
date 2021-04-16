@@ -5,7 +5,15 @@ import Collections from './Collections'
 const Sidebar = ({ changeView, createCollection, handleCollectionInput, collectionList, openCollection, deleteCollection, collectionInput }) => {
   return (
     <div className="Sidebar">
-      <button onClick={changeView}>Change View</button>
+      <div className="search">
+        <input
+          id="searchbar" 
+          placeholder="Search tasks..."
+          value=""/>
+        <button 
+          id="change-view"
+          onClick={changeView}>Change View</button>
+      </div>
       <Collections 
         collectionList={collectionList}
         createCollection={createCollection}

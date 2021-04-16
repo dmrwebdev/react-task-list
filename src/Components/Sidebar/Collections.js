@@ -6,14 +6,15 @@ const Collections = ({ createCollection, handleCollectionInput, collectionList, 
     Object.keys(collectionList).map((key) => {
       if (key !== 'default') {
         return (
-          <div className="list" key={key}>
+          <div className="collection" key={key}>
             <div
               id={`list-${key}`}
+              className='collection-name'
               onClick={openCollection} >
               {key}
             </div>
             <button id={`delete-${key}`} 
-            className="button-list-delete" 
+            className="delete-collection" 
             onClick={(e) => {
               if (window.confirm('Are you sure you wish to delete this item?')) {
                 return deleteCollection(e);
@@ -26,12 +27,13 @@ const Collections = ({ createCollection, handleCollectionInput, collectionList, 
   
   return (
     <div
-      className="list" >
+      className="collection-container" >
       <input id='input-addcollection' type="text" name="collection" placeholder="New list name..." onChange={handleCollectionInput} value={collectionInput}/>
-      <button name="collection" onClick={createCollection} >New Collection</button>
-      <div className="list list-active" >
+      <button id='button-addcollection' name="collection" onClick={createCollection} >New Collection</button>
+      <div className="collection list-active" >
           <div
-            id='list-default'
+            id='default-collection'
+            className="collection"
             onClick={openCollection} >
             Default List
           </div>

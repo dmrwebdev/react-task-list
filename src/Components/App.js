@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Sidebar from './Sidebar/Sidebar';
 import ListView from './Tasks/ListView';
-import TaskForm from './Tasks/TaskForm';
+import TaskForm from './TaskForm/TaskForm';
 import firebase from '../database';
 
 const inputInitialState = {
@@ -13,22 +13,20 @@ const inputInitialState = {
   "difficulty": "",
   "reward": "",
   'materials': {
-/*     material: {
-      "item": "",
-      "price": ""
-    
-    } */
+    "material-1": {
+      'item': "",
+      'price': ""
+    }
   }
 }
 
 const App = () => { 
-  //UX States
-  const [ userView, setUserView ] = useState(true); //Will change to some other system for more types of views, for now true is list view 
   //Task states
   const [ taskList, setTaskList ] = useState('');
   const [ taskInput, setTaskInput ] = useState(inputInitialState);
   const [ currentTaskId, setCurrentTaskId ] = useState('');
-  const [ newMaterialBox, setNewMaterialBox ] = useState(false);
+   //UX States
+   const [ userView, setUserView ] = useState(true); //Will change to some other system for more types of views, for now true is list view
   //Sidebar States
   const [ collectionList, setCollectionList ] = useState('');
   const [ collectionInput, setCollectionInput ] = useState('');
@@ -72,6 +70,7 @@ const App = () => {
     }).catch((error) => {
       console.error(error);
     });
+    
     setUserView(false)
   }
 
@@ -79,11 +78,9 @@ const App = () => {
     const materialName = event.target.name.match(/(?<=material-).+/g);
     if(event.target.name.match(/^material/)) {
       if (taskInput.materials[event.target.parentElement.id]) {
-        console.log('firing1')
         setTaskInput({...taskInput, materials: { ...taskInput.materials, 
           [event.target.parentElement.id]: { ...taskInput.materials[event.target.parentElement.id], [materialName]: event.target.value}}})
       } else {
-        console.log('firing2')
         setTaskInput({...taskInput, materials: { ...taskInput.materials, 
           [event.target.parentElement.id]: {[materialName]: event.target.value}}})
       }
@@ -97,16 +94,25 @@ const App = () => {
     event.preventDefault();
     const regex = /(?<=list-).+/g
     const id = selectedCollection.match(regex).toString();
-    if(taskInput.title) {
-      dbRef.ref('tasks/' + id).push(taskInput);
+    if  (currentTaskId) {
+      dbRef.ref('tasks/' + id + '/' + currentTaskId).set(taskInput);
       setCurrentTaskId('')
       setTaskInput(inputInitialState);
-    }
+    } else {
+      if (taskInput.title) {
+        dbRef.ref('tasks/' + id).push(taskInput);
+        setCurrentTaskId('')
+        setTaskInput(inputInitialState);
+      }
+    } 
   }
 
   const deleteTask = (event) => {
     if (currentTaskId) {
-      dbRef.ref().child(`tasks/${currentTaskId}`).remove()
+      const regex = /(?<=list-).+/g
+      const id = selectedCollection.match(regex).toString();
+      dbRef.ref().child(`tasks/${id}/${currentTaskId}`).remove()
+      setCurrentTaskId('');
     } //else nothing
     setCurrentTaskId('');
     setTaskInput(inputInitialState);
@@ -126,7 +132,7 @@ const App = () => {
 
   const openCollection = (event) => {
     const activeList = document.querySelector('.list-active')
-    const newList = document.getElementById(event.target.id);
+    const newList = document.getElementById(event.target.id).parentElement;
     if (activeList) {
       activeList.classList.remove('list-active')
     }
@@ -144,21 +150,22 @@ const App = () => {
       })
       .catch(function(error) {
         console.log("Remove failed: " + error.message)
-      });;
+      });
       setSelectedCollection('default')
     }
   }
 
-  const generateMaterialBox = () => {
-    const materialBoxes = document.querySelectorAll('.material-container')
+  const generateMaterialBox = (object) => {
+    setTaskInput(object)
+    /* setNewMaterialBox(count => count + 1) */
+    /* const materialBoxes = document.querySelectorAll('.material-container')
     console.log(Array.from(materialBoxes).length)
   /*   if (materialBoxes.length === 1) {
-
     } */
     /* if (materialBoxes.length[materialBoxes.length - 1][] */
-    return 'poop'
+   // return 'poop'
   }
-  console.log(generateMaterialBox())
+ //console.log(generateMaterialBox())
   /* const selectedCollection = */
 
   const changeView = () => {
@@ -193,6 +200,9 @@ const App = () => {
         handleChange={handleChange}  
         handleSubmit={handleSubmit}
         taskInput={taskInput}
+        generateMaterialBox={generateMaterialBox}
+        userView={userView}
+        currentTaskId={currentTaskId}
       />
       )
     }
