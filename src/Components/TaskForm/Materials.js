@@ -46,7 +46,6 @@ const Materials = ({ handleChange, taskInput, generateMaterialBox }) => {
       if (keyNum < deletedId) {
         reOrdered = { ...taskInput, materials: { ...reOrdered.materials, [key]: { ...taskInput.materials[key]}} }
       } else {
-        console.log('firing')
         reOrdered = { ...taskInput, materials: { ...reOrdered.materials, [`material-${keyNum - 1}`] : {...taskInput.materials[key]}}}
       }
     })

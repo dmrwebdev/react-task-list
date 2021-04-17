@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const Collections = ({ createCollection, handleCollectionInput, collectionList, openCollection, deleteCollection, collectionInput }) => {
-   
+const Collections = ({ createCollection, handleCollectionInput, collectionList, openCollection, deleteCollection, collectionInput, selectedCollection }) => {
+  useEffect(() => {
+    const buttons = Array.from(document.getElementsByClassName('delete-collection'));
+    buttons.forEach(button => {
+      const list = button.id.split('-')[1]
+      const collection = selectedCollection.split('-')[1]
+      if (list === collection) {
+        button.style.display = "inline";
+      } else {
+        button.style.display = "none";
+      }
+    })
+    
+  }, [selectedCollection]);
+
   const mappedCollections = 
     Object.keys(collectionList).map((key) => {
       if (key !== 'default') {
@@ -19,7 +32,7 @@ const Collections = ({ createCollection, handleCollectionInput, collectionList, 
               if (window.confirm('Are you sure you wish to delete this item?')) {
                 return deleteCollection(e);
               }}} >
-              Delete List</button>
+              X</button>
           </div>
         )
       }
@@ -28,12 +41,14 @@ const Collections = ({ createCollection, handleCollectionInput, collectionList, 
   return (
     <div
       className="collection-container" >
-      <input id='input-addcollection' type="text" name="collection" placeholder="New list name..." onChange={handleCollectionInput} value={collectionInput}/>
-      <button id='button-addcollection' name="collection" onClick={createCollection} >New Collection</button>
-      <div className="collection list-active" >
+        <div className="add-collection-group">
+          <input id='input-addcollection' type="text" name="collection" placeholder="New list name..." onChange={handleCollectionInput} value={collectionInput} />
+          <button id='button-addcollection' name="collection" onClick={createCollection} >+</button>
+        </div>
+      <div className="collection" >
           <div
             id='list-default'
-            className="collection"
+            className="collection-name list-active"
             onClick={openCollection} >
             Default List
           </div>

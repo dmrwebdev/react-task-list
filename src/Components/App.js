@@ -31,6 +31,7 @@ const App = () => {
   const [ collectionList, setCollectionList ] = useState('');
   const [ collectionInput, setCollectionInput ] = useState('');
   const [ selectedCollection, setSelectedCollection] = useState('list-default');
+  const [ searchInput, setSearchInput] = useState('')
 
   const dbRef = firebase.database();
   // Lifecycle hook for firebase.
@@ -107,7 +108,7 @@ const App = () => {
     } 
   }
   
-  const deleteTask = (event) => {
+  const deleteTask = () => {
     if (currentTaskId) {
       const regex = /(?<=list-).+/g
       const id = selectedCollection.match(regex).toString();
@@ -154,6 +155,8 @@ const App = () => {
       setSelectedCollection('default')
     }
   }
+
+  const handleSearchInput = (event) => setSearchInput(event.target.value);
 
   const generateMaterialBox = (object) => {
     setTaskInput(object)
@@ -221,6 +224,8 @@ const App = () => {
         openCollection={openCollection}
         deleteCollection={deleteCollection}
         collectionInput={collectionInput}
+        selectedCollection={selectedCollection}
+        handleSearchInput={handleSearchInput}
          />
       {view()}
     </div>
