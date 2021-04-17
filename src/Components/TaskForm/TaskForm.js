@@ -2,21 +2,10 @@ import './Tasks.css';
 import RadioGroup from './RadioGroup'
 import Materials from './Materials'
 
-const radioVals = [1,2,3,4,5]
-
 function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, deleteTask, generateMaterialBox }) { 
-  
-  const handleChecked = () => {
-    const radios = Array.from(document.querySelectorAll('input')).filter(elem => elem.type === 'radio');
-    radios.map(elem => {
-      return taskInput[elem.name] && elem.value === taskInput[elem.name]
-      ? elem.checked = true
-      : elem.checked = false
-    });
-  }
-  
+    
   return (
-    <form className="TaskForm" handlechecked={handleChecked()} onSubmit={handleSubmit} >
+    <form className="TaskForm" onSubmit={handleSubmit} >
       <textarea
         className='task-title'
         name='title'
@@ -42,21 +31,17 @@ function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, delete
           taskInput={taskInput}
           description="Priority"
           groupName="priority"
-          handlechange={handleChange}
-          radioVals={radioVals}
-          />
+          handlechange={handleChange} />
         <RadioGroup
           taskInput={taskInput}
           description="Difficulty"
           handlechange={handleChange}
-          groupName="difficulty"
-          radioVals={radioVals} />
+          groupName="difficulty" />
         <RadioGroup
           taskInput={taskInput}
           description="Reward"
           handlechange={handleChange}
-          groupName="reward"
-          radioVals={radioVals} />
+          groupName="reward" />
       </div>
       <Materials
         handleChange={handleChange}
