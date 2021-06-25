@@ -2,8 +2,8 @@ import './Tasks.css';
 import RadioGroup from './RadioGroup'
 import Materials from './Materials'
 
-function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, deleteTask, generateMaterialBox }) { 
-    
+function TaskForm({ currentTaskId, handleChange, handleMaterial, handleSubmit, deleteTask, taskInput }) { 
+
   return (
     <form className="TaskForm" onSubmit={handleSubmit} >
       <textarea
@@ -25,7 +25,7 @@ function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, delete
             onChange={handleChange}
             type="date"
             name="dueDate"
-            value={taskInput.dueDate || ''} />
+            value={taskInput.dueDate/*  || '' */} />
         </label>
         <RadioGroup
           taskInput={taskInput}
@@ -44,10 +44,9 @@ function TaskForm({ currentTaskId, taskInput, handleChange, handleSubmit, delete
           groupName="reward" />
       </div>
       <Materials
-        handleChange={handleChange}
-        taskInput={taskInput}
-        currentTaskId={currentTaskId}
-        generateMaterialBox={generateMaterialBox} />
+        materials={taskInput.materials}
+        handleMaterial={handleMaterial}
+        currentTaskId={currentTaskId} />
       <div className="task-controls" >
         <button className="task-submit" type="submit">Submit</button>
         <button className="task-delete" onClick={deleteTask} type="button">Delete</button>

@@ -1,56 +1,73 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const Collections = ({ createCollection, handleCollectionInput, collectionList, openCollection, deleteCollection, collectionInput, selectedCollection }) => {
+const Collections = ({ createCollection, collectionList, openCollection, deleteCollection, selectedCollection }) => {
+  const [ collectionInput, setCollectionInput ] = useState('');
+
   useEffect(() => {
     const buttons = Array.from(document.getElementsByClassName('delete-collection'));
     buttons.forEach(button => {
-      const list = button.id.split('-')[1]
-      const collection = selectedCollection.split('-')[1]
-      if (list === collection) {
+      const list = button.getAttribute('data-id');
+      if (list === selectedCollection) {
         button.style.display = "inline";
       } else {
         button.style.display = "none";
       }
     })
-    
   }, [selectedCollection]);
 
+  function handleCollectionInput(event) {
+    setCollectionInput(event.target.value)
+  }
+
+  function handleCreateCollection() {
+    if(collectionInput) {
+      createCollection(collectionInput);
+      setCollectionInput('');
+    }
+  }
+
   const mappedCollections = 
+    // eslint-disable-next-line array-callback-return
     Object.keys(collectionList).map((key) => {
-      if (key !== 'default') {
+      if (key !== 'all-tasks') {
         return (
           <div className="collection" key={key}>
             <div
-              id={`list-${key}`}
+              data-id={key}
               className='collection-name'
               onClick={openCollection} >
               {key}
             </div>
-            <button id={`delete-${key}`} 
-            className="delete-collection" 
-            onClick={(e) => {
-              if (window.confirm('Are you sure you wish to delete this item?')) {
-                return deleteCollection(e);
-              }}} >
-              X</button>
+            <button 
+              data-id={key}
+              className="delete-collection" 
+              onClick={(e) => {
+                if (window.confirm('Are you sure you wish to delete this item?')) {
+                  return deleteCollection(e);
+                }}} > 
+                X
+            </button>
           </div>
         )
       }
     })
+
   
+    
+
   return (
     <div
       className="collection-container" >
         <div className="add-collection-group">
           <input id='input-addcollection' type="text" name="collection" placeholder="New list name..." onChange={handleCollectionInput} value={collectionInput} />
-          <button id='button-addcollection' name="collection" onClick={createCollection} >+</button>
+          <button id='button-addcollection' name="collection" onClick={handleCreateCollection} >+</button>
         </div>
       <div className="collection" >
           <div
-            id='list-default'
+            data-id='all-tasks'
             className="collection-name list-active"
             onClick={openCollection} >
-            Default List
+            All Tasks
           </div>
         </div>
       {mappedCollections}

@@ -1,9 +1,12 @@
-import React from 'react';
+import { useState } from 'react';
 import './Sidebar.css';
 import Collections from './Collections'
 
 
-const Sidebar = ({ changeView, createCollection, handleCollectionInput, collectionList, openCollection, deleteCollection, collectionInput, selectedCollection, handleSearchInput, searchInput }) => {
+const Sidebar = ({ changeView, createCollection, handleCollectionInput, collectionList, openCollection, deleteCollection, collectionInput, selectedCollection }) => {
+  const [ searchInput, setSearchInput] = useState('');
+
+  function handleSearchInput(event) { setSearchInput(event.target.value) }
   return (
     <div className="Sidebar">
       <div className="search">
